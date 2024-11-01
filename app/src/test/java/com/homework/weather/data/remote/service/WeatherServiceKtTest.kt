@@ -1,6 +1,7 @@
 package com.homework.weather.data.remote.service
 
 import com.google.common.truth.Truth.assertThat
+import com.homework.weather.BuildConfig
 import com.homework.weather.MainDispatcherRule
 import com.homework.weather.data.remote.dto.CityDto
 import com.homework.weather.data.remote.dto.CoordDto
@@ -53,7 +54,7 @@ class WeatherServiceKtTest {
 
         //GIVEN
         mockWebServer.enqueue(MockResponse().setBody(jsonResponse).setResponseCode(200))
-        val expectedEndPoint = "/data/2.5/forecast?lat=36.783611&lon=127.004173&appid=${Constants.API_KEY}"
+        val expectedEndPoint = "/data/2.5/forecast?lat=36.783611&lon=127.004173&appid=${BuildConfig.API_KEY}"
 
         //WHEN
         weatherService.getWeather(36.783611,127.004173)

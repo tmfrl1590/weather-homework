@@ -25,13 +25,11 @@ import coil.compose.rememberAsyncImagePainter
 import com.homework.weather.domain.model.WeatherInfo
 import com.homework.weather.features.shared.CommonText
 import com.homework.weather.ui.theme.COMPONENT_BACKGROUND
+import com.homework.weather.utils.convertToIconNumFromWeather
 import com.homework.weather.utils.convertToMinTempAndMaxTemp
 import com.homework.weather.utils.convertToTextFromWeather
 import com.homework.weather.utils.getApiImage
-import com.homework.weather.utils.convertToIconNumFromWeather
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.homework.weather.utils.groupDailyWeather
 
 @Composable
 fun FiveDayForecastArea(
@@ -111,63 +109,4 @@ fun FiveDayForecastItem(
 }
 
 
-data class WeatherData(
-    val date: String,
-    val maxTemp: Double,
-    val minTemp: Double,
-    val weather: String // 대표 날씨 추가
-)
 
-fun groupDailyWeather(dataList: List<WeatherInfo>): List<WeatherData> {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    val dayFormat = SimpleDateFormat("E", Locale.KOREAN) // 요일 형식
-    val groupedData = HashMap<String, Pair<Double, Double>>() // 날짜별 최고/최저 온도 저장
-    val weatherCount = HashMap<String, HashMap<String, Int>>() // 날짜별 날씨 카운트 저장
-
-    dataList.forEach { data ->
-        val dtTxt = data.dtTxt
-        val main = data.main
-        val tempMax = main.tempMax
-        val tempMin = main.tempMin
-        val weather = data.weather.firstOrNull()?.main ?: "Clear" // 첫 번째 날씨 정보 사용 (예: clear, cloud 등)
-
-        // 날짜 추출
-        val date = dateFormat.parse(dtTxt) ?: return@forEach
-        val day = dayFormat.format(date)
-
-        // 그룹화하여 최고/최저 온도 업데이트
-        val currentTemps = groupedData.getOrDefault(day, Pair(tempMax, tempMin))
-        groupedData[day] = Pair(
-            maxOf(currentTemps.first, tempMax),
-            minOf(currentTemps.second, tempMin)
-        )
-
-        // 날씨 카운트 업데이트
-        val dayWeatherCount = weatherCount.getOrPut(day) { HashMap() }
-        dayWeatherCount[weather] = dayWeatherCount.getOrDefault(weather, 0) + 1
-    }
-
-    // 오늘의 요일과 요일 순서 설정
-    val daysOfWeek = listOf("일", "월", "화", "수", "목", "금", "토")
-    val today = dayFormat.format(Date())
-    val startIndex = daysOfWeek.indexOf(today)
-
-    // 오늘부터 요일 순서로 정렬하여 반환
-    val sortedDays = if (startIndex != -1) {
-        daysOfWeek.subList(startIndex, daysOfWeek.size) + daysOfWeek.subList(0, startIndex)
-    } else {
-        daysOfWeek // 오늘이 리스트에 없는 경우 기본 순서 유지
-    }
-
-    return sortedDays.mapNotNull { day ->
-        groupedData[day]?.let { temps ->
-            val mostCommonWeather = weatherCount[day]?.maxByOrNull { it.value }?.key ?: "Clear"
-            WeatherData(
-                date = if (day == today) "오늘" else day,
-                maxTemp = temps.first,
-                minTemp = temps.second,
-                weather = mostCommonWeather,
-            )
-        }
-    }
-}

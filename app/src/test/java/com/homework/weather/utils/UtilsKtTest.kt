@@ -1,5 +1,10 @@
 package com.homework.weather.utils
 
+import com.homework.weather.domain.model.Clouds
+import com.homework.weather.domain.model.Main
+import com.homework.weather.domain.model.Sys
+import com.homework.weather.domain.model.WeatherInfo
+import com.homework.weather.domain.model.Wind
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -129,4 +134,145 @@ class UtilsKtTest {
         assertEquals("11d", result5)
         assertEquals("13d", result6)
     }
+
+    @Test
+    fun 날짜데이터를_UI에_표시할_형식으로_변환한다(){
+        // Given
+        val date1 = "2024-10-02 15:00:00"
+        val date2 = "2024-10-02 18:00:00"
+        val date3 = "2024-10-02 21:00:00"
+
+        // When
+        val result1 = convertToKoreanTime(date1)
+        val result2 = convertToKoreanTime(date2)
+        val result3 = convertToKoreanTime(date3)
+
+        // Then
+        assertEquals("오후 3시", result1)
+        assertEquals("오후 6시", result2)
+        assertEquals("오후 9시", result3)
+    }
+
+    @Test
+    fun 서버에서_받아온_데이터_중에서_현재_시간보다_이후의_데이터만_필터링(){
+        // Given
+        val list = listOf(
+            weatherInfo1,
+            weatherInfo2,
+            weatherInfo3,
+            weatherInfo4
+        )
+
+        // When
+        val result = filterPastWeatherData(list)
+
+        // Then
+        assertEquals(1, result.size)
+        assertEquals("2024-11-2 21:00:00", result[0].dtTxt)
+    }
 }
+
+
+val weatherInfo1 = WeatherInfo(
+    dt = 1633154400,
+    main = Main(
+        temp = 288.15,
+        feelsLike = 288.15,
+        tempMin = 288.15,
+        tempMax = 288.15,
+        pressure = 1013,
+        seaLevel = 1013,
+        grndLevel = 1013,
+        humidity = 100,
+        tempKf = 288.15
+    ),
+    weather = emptyList(),
+    clouds = Clouds(all = 100),
+    wind = Wind(
+        speed = 1.03,
+        deg = 0,
+        gust = 1.03
+    ),
+    visibility = 10000,
+    pop = 0.1,
+    sys = Sys(pod = "d"),
+    dtTxt = "2024-10-20 15:00:00"
+)
+
+val weatherInfo2 = WeatherInfo(
+    dt = 1633154400,
+    main = Main(
+        temp = 288.15,
+        feelsLike = 288.15,
+        tempMin = 288.15,
+        tempMax = 288.15,
+        pressure = 1013,
+        seaLevel = 1013,
+        grndLevel = 1013,
+        humidity = 100,
+        tempKf = 288.15
+    ),
+    weather = emptyList(),
+    clouds = Clouds(all = 100),
+    wind = Wind(
+        speed = 1.03,
+        deg = 0,
+        gust = 1.03
+    ),
+    visibility = 10000,
+    pop = 0.1,
+    sys = Sys(pod = "d"),
+    dtTxt = "2024-10-20 18:00:00"
+)
+
+val weatherInfo3 = WeatherInfo(
+    dt = 1633154400,
+    main = Main(
+        temp = 288.15,
+        feelsLike = 288.15,
+        tempMin = 288.15,
+        tempMax = 288.15,
+        pressure = 1013,
+        seaLevel = 1013,
+        grndLevel = 1013,
+        humidity = 100,
+        tempKf = 288.15
+    ),
+    weather = emptyList(),
+    clouds = Clouds(all = 100),
+    wind = Wind(
+        speed = 1.03,
+        deg = 0,
+        gust = 1.03
+    ),
+    visibility = 10000,
+    pop = 0.1,
+    sys = Sys(pod = "d"),
+    dtTxt = "2024-10-20 18:00:00"
+)
+
+val weatherInfo4 = WeatherInfo(
+    dt = 1633154400,
+    main = Main(
+        temp = 288.15,
+        feelsLike = 288.15,
+        tempMin = 288.15,
+        tempMax = 288.15,
+        pressure = 1013,
+        seaLevel = 1013,
+        grndLevel = 1013,
+        humidity = 100,
+        tempKf = 288.15
+    ),
+    weather = emptyList(),
+    clouds = Clouds(all = 100),
+    wind = Wind(
+        speed = 1.03,
+        deg = 0,
+        gust = 1.03
+    ),
+    visibility = 10000,
+    pop = 0.1,
+    sys = Sys(pod = "d"),
+    dtTxt = "2024-11-2 21:00:00"
+)

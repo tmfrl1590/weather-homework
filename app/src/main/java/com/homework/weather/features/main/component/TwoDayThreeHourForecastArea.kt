@@ -26,10 +26,9 @@ import com.homework.weather.domain.model.WeatherInfo
 import com.homework.weather.features.shared.CommonText
 import com.homework.weather.ui.theme.COMPONENT_BACKGROUND
 import com.homework.weather.utils.convertToCelsiusFromKelvin
+import com.homework.weather.utils.convertToKoreanTime
+import com.homework.weather.utils.filterPastWeatherData
 import com.homework.weather.utils.getApiImage
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 @Composable
 fun TwoDayThreeHourForecastArea(
@@ -92,40 +91,4 @@ fun TwoDayThreeHourForecastItem(
            modifier = Modifier.size(60.dp)
        )
    }
-}
-
-private fun filterPastWeatherData(list: List<WeatherInfo>): List<WeatherInfo> {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    val currentDate = Date()
-
-    // 현재 시간을 기준으로 과거의 데이터만 필터링
-    return list.filter { data ->
-        val dataDate = dateFormat.parse(data.dtTxt)
-        dataDate != null && dataDate.after(currentDate)
-    }
-}
-
-private fun convertToKoreanTime(dateStr: String): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    val hourFormat = SimpleDateFormat("HH", Locale.getDefault()) // 시간 추출 포맷
-    val inputDate = dateFormat.parse(dateStr) ?: return ""
-    val currentDate = Date()
-
-    // 현재 시각의 시간을 가져와 3시간 단위로 반올림
-    val currentHour = hourFormat.format(currentDate).toInt()
-    val roundedHour = (currentHour / 3) * 3 + if (currentHour % 3 >= 1) 3 else 0
-
-    // inputDate의 시간도 추출
-    val inputHour = hourFormat.format(inputDate).toInt()
-
-    // 반올림된 현재 시각과 inputDate의 시간이 같으면 "지금"으로 표시
-    if (inputHour == roundedHour) {
-        return "지금"
-    }
-
-    // 오전/오후 및 12시간 형식 변환
-    val period = if (inputHour < 12) "오전" else "오후"
-    val formattedHour = if (inputHour % 12 == 0) 12 else inputHour % 12
-
-    return "$period ${formattedHour}시"
 }
