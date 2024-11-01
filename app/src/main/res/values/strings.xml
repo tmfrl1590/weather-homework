@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">weather</string>
+
+    <string name="detail1">습도</string>
+    <string name="detail2">구름</string>
+    <string name="detail3">바람 속도</string>
+    <string name="detail4">기압</string>
+
+    <string name="search_keyword_placeholder">검색어를 입력해주세요</string>
+</resources>
