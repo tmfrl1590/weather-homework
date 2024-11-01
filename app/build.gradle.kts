@@ -1,3 +1,10 @@
+import java.util.Properties
+
+val properties = Properties()
+properties.load(project.rootProject.file("local.properties").inputStream())
+val apiKey = properties.getProperty("API_KEY")
+val baseUrl = properties.getProperty("BASE_URL")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -23,6 +30,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_KEY", "\"${apiKey}\"")
+        buildConfigField("String", "BASE_URL", "\"${baseUrl}\"")
     }
 
     buildTypes {
@@ -47,6 +57,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     packaging {
         resources {

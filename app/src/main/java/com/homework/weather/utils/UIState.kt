@@ -7,5 +7,4 @@ sealed class UIState<out T>(
     data object Loading: UIState<Nothing>()
     class Success<T>(data: T): UIState<T>(data)
     class Error<T>(data: T? = null): UIState<T>(data)
-    //data object Exception: UIState<Nothing>()
 }

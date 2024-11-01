@@ -1,7 +1,7 @@
 package com.homework.weather.data.remote.service
 
+import com.homework.weather.BuildConfig
 import com.homework.weather.data.remote.dto.WeatherRemoteDto
-import com.homework.weather.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Query
 import javax.inject.Singleton
@@ -16,6 +16,6 @@ interface WeatherService {
     suspend fun getWeather(
         @Query("lat") lat: Double,
         @Query("lon") lon: Double,
-        @Query("appid") appid: String = Constants.API_KEY,
+        @Query("appid") appid: String = BuildConfig.API_KEY
     ): WeatherRemoteDto
 }

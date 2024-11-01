@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import com.homework.weather.MainDispatcherRule
 import com.homework.weather.data.remote.dto.CityDto
 import com.homework.weather.data.remote.dto.CoordDto
-import com.homework.weather.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json

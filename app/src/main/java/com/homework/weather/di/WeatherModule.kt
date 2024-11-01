@@ -1,9 +1,9 @@
 package com.homework.weather.di
 
+import com.homework.weather.BuildConfig
 import com.homework.weather.data.remote.service.WeatherService
 import com.homework.weather.data.repository.WeatherRepositoryImpl
 import com.homework.weather.domain.repository.WeatherRepository
-import com.homework.weather.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -52,7 +52,7 @@ object WeatherModule {
     @Provides
     fun provideWeatherService(): WeatherService {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(logging())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
