@@ -17,8 +17,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.homework.weather.domain.model.CityModel
 import com.homework.weather.domain.model.WeatherModel
 import com.homework.weather.features.shared.CommonText
-import com.homework.weather.utils.convertToCelsiusFromKelvin
 import com.homework.weather.utils.convertTempToText
+import com.homework.weather.utils.convertToCelsiusFromKelvin
 import com.homework.weather.utils.convertToTextFromWeather
 import com.homework.weather.utils.getApiImage
 

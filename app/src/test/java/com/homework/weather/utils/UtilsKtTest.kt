@@ -7,6 +7,7 @@ import com.homework.weather.domain.model.WeatherInfo
 import com.homework.weather.domain.model.Wind
 import org.junit.Assert.*
 import org.junit.Test
+import java.text.SimpleDateFormat
 
 class UtilsKtTest {
 
@@ -138,14 +139,17 @@ class UtilsKtTest {
     @Test
     fun 날짜데이터를_UI에_표시할_형식으로_변환한다(){
         // Given
+        val fixedCurrentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2024-10-02 12:59:00")!!
+
+
         val date1 = "2024-10-02 15:00:00"
         val date2 = "2024-10-02 18:00:00"
         val date3 = "2024-10-02 21:00:00"
 
         // When
-        val result1 = convertToKoreanTime(date1)
-        val result2 = convertToKoreanTime(date2)
-        val result3 = convertToKoreanTime(date3)
+        val result1 = convertToKoreanTime(date1, fixedCurrentDate)
+        val result2 = convertToKoreanTime(date2, fixedCurrentDate)
+        val result3 = convertToKoreanTime(date3, fixedCurrentDate)
 
         // Then
         assertEquals("오후 3시", result1)

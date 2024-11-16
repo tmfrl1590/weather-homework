@@ -93,15 +93,14 @@ fun filterPastWeatherData(list: List<WeatherInfo>): List<WeatherInfo> {
     }
 }
 
-fun convertToKoreanTime(dateStr: String): String {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    val hourFormat = SimpleDateFormat("HH", Locale.getDefault()) // 시간 추출 포맷
+fun convertToKoreanTime(dateStr: String, currentDate: Date = Date()): String {
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA)
+    val hourFormat = SimpleDateFormat("HH", Locale.KOREA) // 시간 추출 포맷
     val inputDate = dateFormat.parse(dateStr) ?: return ""
-    val currentDate = Date()
 
     // 현재 시각의 시간을 가져와 3시간 단위로 반올림
-    val currentHour = hourFormat.format(currentDate).toInt()
-    val roundedHour = (currentHour / 3) * 3 + if (currentHour % 3 >= 1) 3 else 0
+    val currentHour = hourFormat.format(currentDate).toInt() // 시간을 정수형으로 추출, 15:30이면 currentHour는 15가 됩니다.
+    val roundedHour = (currentHour / 3) * 3 + if (currentHour % 3 >= 1) 3 else 0 // (currentHour / 3) * 3는 3시간 단위로 내림한 값을 계산, if (currentHour % 3 >= 1) 3 else 0는 3으로 나누었을 때 나머지가 1 이상인 경우 3을 더해 반올림 처리
 
     // inputDate의 시간도 추출
     val inputHour = hourFormat.format(inputDate).toInt()
@@ -140,7 +139,7 @@ fun groupDailyWeather(dataList: List<WeatherInfo>): List<WeatherData> {
 
         // 날짜 추출
         val date = dateFormat.parse(dtTxt) ?: return@forEach
-        val day = dayFormat.format(date)
+        val day = dayFormat.format(date) // 날짜를 요일로 변환 ex. "월"
 
         // 그룹화하여 최고/최저 온도 업데이트
         val currentTemps = groupedData.getOrDefault(day, Pair(tempMax, tempMin))

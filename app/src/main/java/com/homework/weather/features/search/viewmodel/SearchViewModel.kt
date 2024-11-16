@@ -25,7 +25,7 @@ class SearchViewModel @Inject constructor(
     val getCityListFromJsonFile: StateFlow<List<CityModel>> = _getCityListFromJsonFile
 
     private val _searchKeyword = MutableStateFlow("")
-    var searchKeyword: StateFlow<String> = _searchKeyword
+    private val searchKeyword: StateFlow<String> = _searchKeyword
 
     private val _loadingState = MutableStateFlow<FileReadState<List<CityModel>>>(FileReadState.Idle)
     val loadingState: StateFlow<FileReadState<List<CityModel>>> = _loadingState
@@ -38,7 +38,7 @@ class SearchViewModel @Inject constructor(
         if (keyword.isEmpty()) {
             cityList // 키워드가 비어있으면 전체 리스트 반환
         } else {
-            cityList.filter { it.name.contains(keyword, ignoreCase = true) } // 대소문자 구분 X
+            cityList.filter { it.name.startsWith(keyword, ignoreCase = true) } // 대소문자 구분 X
         }
     }.stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
@@ -50,14 +50,14 @@ class SearchViewModel @Inject constructor(
     // reduced_citylist.json 파일로부터 도시 정보 파싱
     private fun getCityDataFromFile(keyword: String){
         viewModelScope.launch(Dispatchers.IO) {
-            _loadingState.value = FileReadState.Loading
+            _loadingState.emit(FileReadState.Loading)
             try {
                 getCityDataFromFileUseCase(keyword).collectLatest {
                     _getCityListFromJsonFile.emit(it)
-                    _loadingState.value = FileReadState.Success(it)
+                    _loadingState.emit(FileReadState.Success(it))
                 }
             }catch (e: Exception){
-                _loadingState.value = FileReadState.Error()
+                _loadingState.emit(FileReadState.Error())
             }
         }
     }

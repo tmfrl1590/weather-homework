@@ -22,12 +22,12 @@ class MainViewModel @Inject constructor(
 
     fun getCurrentWeatherInfo(lat: Double, lon: Double){
         viewModelScope.launch(Dispatchers.IO) {
-            _getWeatherInfoList.value = UIState.Loading
+            _getWeatherInfoList.emit(UIState.Loading)
             try {
                 val result = getWeatherInfoUseCase(lat, lon)
-                _getWeatherInfoList.value = UIState.Success(result)
+                _getWeatherInfoList.emit(UIState.Success(result))
             } catch (e: Exception){
-                _getWeatherInfoList.value = UIState.Error()
+                _getWeatherInfoList.emit(UIState.Error())
             }
         }
     }
