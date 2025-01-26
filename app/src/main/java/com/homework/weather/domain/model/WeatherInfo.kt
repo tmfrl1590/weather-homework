@@ -6,7 +6,7 @@ data class WeatherInfo(
     val weather: List<Weather>,
     val clouds: Clouds,
     val wind: Wind,
-    val visibility: Int,
+    val visibility: Int? = 0,
     val pop: Double,
     val sys: Sys,
     val dtTxt: String,

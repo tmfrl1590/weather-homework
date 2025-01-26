@@ -37,7 +37,7 @@ data class WeatherInfoDto(
     val weather: List<WeatherDto>,
     val clouds: CloudsDto,
     val wind: WindDto,
-    val visibility: Int,
+    val visibility: Int? = 0,
     val pop: Double,
     val sys: SysDto,
     @SerialName("dt_txt")

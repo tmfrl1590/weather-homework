@@ -27,6 +27,7 @@ class MainViewModel @Inject constructor(
                 val result = getWeatherInfoUseCase(lat, lon)
                 _getWeatherInfoList.emit(UIState.Success(result))
             } catch (e: Exception){
+                e.printStackTrace()
                 _getWeatherInfoList.emit(UIState.Error())
             }
         }
